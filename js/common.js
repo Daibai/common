@@ -12,15 +12,15 @@
   * @return {string} - 返回格式化的日期【"2019-01-12 16:00:00"】
   */
 
-   function formateDate(date,option={hasTime:true,joinSymbol:'-'}){
+function formateDate(date,{hasTime=true,joinSymbol='-'}={hasTime:true,joinSymbol:'-'}){
     if(!date) date = new Date();
-    let _ = option.joinSymbol,
+    let _ = joinSymbol,
         year = date.getFullYear(),
         month = date.getMonth() + 1,
         day = date.getDate();
     if(month < 10) month = '0' + month;
     if(day < 10) day = '0' + day;
-    if(option.hasTime){
+    if(hasTime){
         let hours = date.getHours(),
             minutes = date.getMinutes(),
             seconds = date.getSeconds();
@@ -32,4 +32,3 @@
         return `${year}${_}${month}${_}${day}`;
     }
 }
-console.log(formateDate(null,{hasTime:false,joinSymbol:'/'}))
