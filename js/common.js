@@ -1,34 +1,76 @@
 /**
  * js常用方法
+ * @author https://github.com/Daibai
  */
 
 
  /**
   * 获取格式化的日期
-  * @param {objct} date - 日期对象 
+  * @param {objct|number|string} date - 日期对象|时间戳|'2019-1-1'
   * @param {object} option - 配置对象
   * @param {boolean} option.hasTime - 是否需要时间(12:00:00) default：true
   * @param {string} option.joinSymbol - 日期的连接符号 default："-"
   * @return {string} - 返回格式化的日期【"2019-01-12 16:00:00"】
   */
-
-function formateDate(date,{hasTime=true,joinSymbol='-'}={hasTime:true,joinSymbol:'-'}){
+export function formateDate(date,{hasTime=true,joinSymbol='-'}={hasTime:true,joinSymbol:'-'}){
     if(!date) date = new Date();
-    let _ = joinSymbol,
-        year = date.getFullYear(),
+    else if(typeof date === 'number' || typeof date === 'string') date = new Date(date);
+    let year = date.getFullYear(),
         month = date.getMonth() + 1,
         day = date.getDate();
-    if(month < 10) month = '0' + month;
-    if(day < 10) day = '0' + day;
+    let res = [year,month,day].map(item=>formateNumnber(item)).join(joinSymbol);
     if(hasTime){
         let hours = date.getHours(),
             minutes = date.getMinutes(),
             seconds = date.getSeconds();
-        if(hours < 10) hours = '0' + hours;
-        if(minutes < 10) minutes = '0' + minutes;
-        if(seconds < 10) seconds = '0' + seconds;
-        return `${year}${_}${month}${_}${day} ${hours}:${minutes}:${seconds}`;
+        return res + ' ' + [hours,minutes,seconds].map(item=>formateNumnber(item)).join(':');
     }else{
-        return `${year}${_}${month}${_}${day}`;
+        return res;
+    }
+    function formateNumnber(n){
+        n = n.toString();
+        return n[1]? n : '0' + n;
+    }
+}
+
+/**
+ * 合并对象，类似于Object.assign,会将多级合并
+ * @param {object} target 
+ * @param  {object[]} args 
+ */
+export function mergeObject(target,...args){
+    args.map(item=>{
+        for(let key in item){
+            if(Object.prototype.toString.apply(item[key]) === "[object Object]"){
+                if(target[key]){
+                    mergeObject(target[key],item[key]);
+                }else{
+                    target[key] = {};
+                    mergeObject(target[key],item[key]);
+                }
+            }else{
+                target[key] = item[key];
+            }
+        }
+    });
+    return target;
+}
+
+/**
+ * 正则相关
+ */
+
+export class Regular {
+    constructor() {
+
+    }
+    //匹配非空文本
+    text(data) {
+        if (/\S+/.test(data) && data) return true;
+        else return false;
+    }
+    //匹配手机号
+    phone(data) {
+        return /^1[3|4|5|7|8|9][0-9]{9}$/.test(data);
     }
 }
