@@ -58,9 +58,17 @@ export function mergeObject(target={},isMergeArray=true,...args){
 }
 
 /**
+ * 千位分隔符
+ * @params {number|string} n 原始的数字
+ */
+export function toThousands(n=''){
+    if(typeof n != 'string') n = n.toString();
+    return n.replace(/(\d{1,3})(?=(\d{3})+$)/g, "$1,");
+ }
+
+/**
  * 正则相关
  */
-
 export class Regular {
     constructor() {
 
