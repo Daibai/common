@@ -57,6 +57,32 @@ export function mergeObject(target={},isMergeArray=true,...args){
     return target;
 }
 
+
+var copy = srcData => {
+    let getType = data => {
+        return Object.prototype.toString.call(data).slice(8, -1);
+    }
+    function inner(src, target) {
+        if(getType(src) === 'Object')  target = {};
+        else target = [];
+        for (let key in src) {
+            if (getType(src[key]) === 'Number' || getType(src[key]) === 'String' || getType(src[key]) === 'Boolean') {
+                target[key] = src[key];
+            } else {
+                if(getType(src[key]) === 'Object')  target[key] = {};
+                else target[key] = [];
+                inner(src[key], target[key]);
+            }
+        }
+        return target;
+    }
+
+    return inner(srcData);
+
+}
+
+
+
 /**
  * 千位分隔符
  * @params {number|string} n 原始的数字
