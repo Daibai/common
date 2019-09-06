@@ -66,7 +66,7 @@ var copy = srcData => {
         if(getType(src) === 'Object')  target = {};
         else target = [];
         for (let key in src) {
-            if (getType(src[key]) === 'Number' || getType(src[key]) === 'String' || getType(src[key]) === 'Boolean') {
+            if (getType(src[key]) !== 'Object' && getType(src[key]) !== 'Array') {
                 target[key] = src[key];
             } else {
                 if(getType(src[key]) === 'Object')  target[key] = {};
