@@ -58,20 +58,25 @@ export function mergeObject(target={},isMergeArray=true,...args){
 }
 
 
-var copy = srcData => {
+export function copy(srcData){
     let getType = data => {
         return Object.prototype.toString.call(data).slice(8, -1);
     }
     function inner(src, target) {
-        if(getType(src) === 'Object')  target = {};
-        else target = [];
+        if(!target){
+            if(getType(src) === 'Object')  target = {};
+            else target = [];
+        }
         for (let key in src) {
-            if (getType(src[key]) !== 'Object' && getType(src[key]) !== 'Array') {
-                target[key] = src[key];
-            } else {
-                if(getType(src[key]) === 'Object')  target[key] = {};
-                else target[key] = [];
+            if(getType(src[key]) === 'Object'){
+                target[key] = {};
                 inner(src[key], target[key]);
+
+            }else if(getType(src[key]) === 'Array'){
+                target[key] = [];
+                inner(src[key], target[key]);
+            }else{
+                target[key] = src[key];
             }
         }
         return target;
