@@ -33,29 +33,6 @@ export function formateDate(date,{hasTime=true,joinSymbol='-'}={hasTime:true,joi
     }
 }
 
-/**
- * 合并对象，类似于Object.assign,会将多级合并
- * @param {object} target  
- * @param {boolean} isMergeArray 是否需要合并数组 default:true
- * @param {object[]} args 
- */
-export function mergeObject(target={},isMergeArray=true,...args){
-    if(typeof isMergeArray != 'boolean') isMergeArray = Boolean(isMergeArray);
-    args.map(item=>{
-        for(let key in item){
-                if(Object.prototype.toString.apply(item[key]) === "[object Object]" && target[key]){
-                        mergeObject(target[key],isMergeArray,item[key]);
-                }
-                else if(isMergeArray && Object.prototype.toString.apply(item[key]) === "[object Array]" && target[key]){
-                        mergeObject(target[key],true,item[key]);
-                }
-                else{
-                    target[key] = item[key];
-                }
-        }
-    });
-    return target;
-}
 
 
 export function copy(srcData){
